@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weapon Store</title>
+  <script src="https://unpkg.com/react @18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom @18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/ @vitejs/plugin-react@3.0.0/dist/index.js"></script>
+  <style>
+    body { background-color: #1f2937; color: white; font-family: sans-serif; }
+    .card { background: #1e293b; padding: 1rem; border-radius: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/javascript">
+    const weapons = [
+      {
+        id: 1,
+        name: "Kilvish Shield",
+        price: 299.99,
+        category: "Defensive",
+        image: "https://i.postimg.cc/KYLqgGXH/caeb8471-b390-4978-ba93-04d2539cdc03.png "
+      },
+      {
+        id: 2,
+        name: "Khema Fire Shaft",
+        price: 499.99,
+        category: "Offensive",
+        image: "https://i.postimg.cc/k5n6WsLP/41836533-5d9b-458a-a6bb-89c5ebe2c6fe.png "
+      },
+      {
+        id: 3,
+        name: "Andhera Kayam Torch",
+        price: 199.5,
+        category: "Utility",
+        image: "https://i.postimg.cc/ht0bFXBg/f00edccf-f085-4171-85c3-76d476b29ab1.png "
+      },
+      {
+        id: 4,
+        name: "Pushpe Flower Bomb",
+        price: 349.99,
+        category: "Explosive",
+        image: "https://i.postimg.cc/SKNLmmS9/972e5909-3d64-40f0-8465-0af89e85e4f1.png "
+      },
+      {
+        id: 5,
+        name: "Kilvish Blackhole Door",
+        price: 799.0,
+        category: "Defensive",
+        image: "https://i.postimg.cc/fLVx050T/dcb4b715-6a73-441a-8d46-e5a1e18b5136.png "
+      },
+      {
+        id: 6,
+        name: "Khamsingh Laser Eyes",
+        price: 899.99,
+        category: "Offensive",
+        image: "https://i.postimg.cc/76jS17g1/dd80152a-a281-49e6-9acd-e31e43e200e2.png "
+      },
+      {
+        id: 7,
+        name: "Pushpe Mindcontrol Device",
+        price: 599.99,
+        category: "Utility",
+        image: "https://i.postimg.cc/pr8zsTZw/17ac163c-9af7-43fd-9ef2-4ace3443ee1a.png "
+      }
+    ];
+
+    const categories = ["All", ...new Set(weapons.map(w => w.category))];
+
+    function App() {
+      const [cart, setCart] = React.useState([]);
+      const [activeCategory, setActiveCategory] = React.useState("All");
+      const [searchTerm, setSearchTerm] = React.useState("");
+
+      const filteredWeapons = weapons.filter(
+        (item) =>
+          (activeCategory === "All" || item.category === activeCategory) &&
+          item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      const addToCart = (item) => {
+        setCart([...cart, item]);
+      };
+
+      return (
+        <div style={{ padding: "1rem" }}>
+          <h1 className="text-2xl font-bold">Weapon Arsenal</h1>
+          <input
+            placeholder="Search weapons..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ margin: "1rem 0", width: "100%", padding: "0.5rem" }}
+          />
+          <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+            {categories.map((cat, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveCategory(cat)}
+                style={{
+                  padding: "0.5rem 1rem",
+                  borderRadius: "999px",
+                  backgroundColor: activeCategory === cat ? "#6366f1" : "#374151",
+                  color: "white"
+                }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ marginTop: "2rem", display: "flex", flexWrap: "wrap", gap: "1rem" }}>
+            {filteredWeapons.map((w) => (
+              <div key={w.id} className="card">
+                <img src={w.image} alt={w.name} style={{ width: "100%", height: "auto" }} />
+                <h3>{w.name}</h3>
+                <p>${w.price.toFixed(2)}</p>
+                <button onClick={() => addToCart(w)} style={{ backgroundColor: "#6366f1", color: "white", padding: "0.5rem" }}>
+                  Add to Cart
+                </button>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: "2rem" }}>
+            <h2>Your Cart ({cart.length})</h2>
+            {cart.map((item, i) => (
+              <div key={i}>
+                {item.name} - ${item.price}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
